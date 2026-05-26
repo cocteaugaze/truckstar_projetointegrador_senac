@@ -1,12 +1,28 @@
 """
 Truckstar - Entry point.
+- Wizard de primeira execução se config.py não existir.
 - Inicializa o banco.
 - Tela de login com TABS (Funcionário / Cliente) + auto-cadastro de cliente.
 - Rate limiting em memória contra brute-force.
 - Hash de senha PBKDF2-SHA256 com salt.
 """
+import sys
 import time
 import threading
+
+import paths
+import setup_wizard
+
+# Garante que o diretório de config (dev: ./, frozen: %LOCALAPPDATA%/Truckstar)
+# está acessível via sys.path antes de tentar importar config.
+paths.prepare_import_path()
+
+# Se for a primeira execução (config.py não existe no caminho esperado),
+# abre o wizard antes de qualquer outro import que dependa do config.
+if not setup_wizard.config_existe():
+    if not setup_wizard.executar_wizard():
+        sys.exit(0)
+
 import customtkinter as ctk
 from tkinter import messagebox
 

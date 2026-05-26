@@ -12,16 +12,34 @@ ao cliente, geração de PDF profissional da OS e validação oficial de CPF/CNP
 - **ReportLab** — geração de PDF
 - **Resend** — envio de email transacional via API
 
-## Setup
+## Instalação (usuário final)
 
-```bash
-pip install -r requirements.txt
-cp config.example.py config.py     # preencha as credenciais
-python main.py
+Baixe o instalador `TruckstarSetup-X.Y.Z.exe` e execute. Ele:
+
+1. Verifica se o MySQL Server está instalado (avisa com link de download se faltar)
+2. Copia os arquivos para `C:\Program Files\Truckstar\`
+3. Cria atalhos no Menu Iniciar e Área de Trabalho
+4. Registra desinstalador em "Aplicativos do Windows"
+
+Na **primeira execução**, abre um wizard de configuração coletando:
+- Credenciais do MySQL (host, usuário, senha, banco)
+- API key do Resend (opcional, para envio de email)
+- Email da oficina (reply-to para respostas dos clientes)
+
+Após configurar, o app cria o banco automaticamente e abre a tela de login.
+
+## Setup (desenvolvedor — rodando do código-fonte)
+
+```powershell
+py -m pip install -r requirements.txt
+copy config.example.py config.py     # preencha as credenciais manualmente
+py main.py
 ```
 
 O script cria o banco `truckstar` automaticamente na primeira execução
 (via `db.inicializar()`).
+
+Para gerar o instalador distribuível, veja [BUILDING.md](BUILDING.md).
 
 ## Login inicial (seed automático)
 

@@ -63,3 +63,8 @@ logs/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# ===== PYINSTALLER / INNO SETUP =====
+*.spec
+warn-*.txt
+installer_output/
