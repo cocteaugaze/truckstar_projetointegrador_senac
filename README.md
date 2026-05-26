@@ -23,17 +23,19 @@ python main.py
 O script cria o banco `truckstar` automaticamente na primeira execução
 (via `db.inicializar()`).
 
-## Logins de exemplo (seed inicial)
+## Login inicial (seed automático)
 
-| Tipo        | Usuário/CPF           | Senha        |
-|-------------|-----------------------|--------------|
-| Admin       | `admin`               | `admin123`   |
-| Atendente   | `atendente`           | `atend123`   |
-| Mecânico    | `mecanico`            | `mec123`     |
-| Cliente     | `111.444.777-35`      | `cliente123` |
+| Tipo  | Usuário | Senha      |
+|-------|---------|------------|
+| Admin | `admin` | `admin123` |
 
-Cliente faz login com **CPF + senha** na aba "Cliente" da tela inicial.
-Há botão "Criar conta de Cliente" para auto-cadastro.
+Apenas o admin é criado automaticamente na primeira inicialização.
+Demais funcionários (Atendente, Mecânico) e clientes devem ser cadastrados via
+sistema. Cliente faz login com **CPF + senha** na aba "Cliente" — há botão
+"Criar conta de Cliente" para auto-cadastro.
+
+> ⚠️ **Troque a senha do admin imediatamente após o primeiro login** via tela
+> de Funcionários. A senha padrão `admin123` é apenas para bootstrap.
 
 ## Permissões por cargo
 
@@ -83,6 +85,8 @@ Há botão "Criar conta de Cliente" para auto-cadastro.
 - `config.py` está no `.gitignore` — nunca versione credenciais
 - Para o email Gmail funcionar, use uma **senha de app**:
   https://myaccount.google.com/apppasswords
-- Senhas no banco são armazenadas como hash PBKDF2 (100k iterações) + salt aleatório
+- Senhas no banco são armazenadas como hash PBKDF2-SHA256 (600k iterações, conforme OWASP 2023) + salt aleatório de 16 bytes
+- Comparação de senhas é resistente a timing attacks (`hmac.compare_digest`)
+- Rate limiting em memória: 5 tentativas / 60s por usuário ou CPF
 - Todo SQL é parametrizado (sem concatenação de strings)
 - Cliente só acessa suas próprias OS (filtro `cliente_id` no SQL)
